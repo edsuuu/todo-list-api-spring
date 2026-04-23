@@ -1,0 +1,26 @@
+A propriedade spring.jpa.hibernate.ddl-auto (que por trás dos panos é a configuração hibernate.hbm2ddl.auto do Hibernate) é responsável por dizer ao Spring Boot o que ele deve fazer com a estrutura do seu banco de dados toda vez que a aplicação iniciar.
+
+A sigla DDL significa Data Definition Language (Linguagem de Definição de Dados), que são comandos SQL como CREATE TABLE, ALTER TABLE, DROP TABLE, etc.
+
+Segundo a documentação oficial do Spring Boot e do Hibernate, aqui estão as opções disponíveis para esse campo e o que cada uma faz:
+
+1. update
+- O que faz: O Hibernate analisa as suas classes @Entity e compara com as tabelas que já existem no banco de dados. Se ele notar que você criou uma tabela nova ou adicionou uma coluna nova na classe, ele vai rodar um CREATE TABLE ou ALTER TABLE automaticamente para atualizar o banco.
+- Importante: Ele NUNCA apaga dados ou colunas. Se você deletar um atributo da sua classe no Java, ele não vai deletar a coluna correspondente no banco.
+- Quando usar: É excelente para o ambiente de desenvolvimento local, pois você vai criando o código e o banco vai se moldando sozinho sem você precisar rodar scripts SQL na mão.
+
+2. none
+- O que faz: Não faz absolutamente nada. O Spring assume que o banco de dados já está pronto e estruturado e não roda nenhum comando estrutural.
+- Quando usar: É a configuração recomendada e padrão para o ambiente de Produção. Em produção, as mudanças no banco devem ser controladas por ferramentas de migração, como o Flyway ou o Liquibase.
+
+3. validate
+- O que faz: Ele apenas checa se o banco de dados tem todas as tabelas e colunas exatamente iguais às suas classes @Entity. Se algo estiver faltando ou diferente, a aplicação "quebra" e nem liga, atirando um erro. Não altera nada no banco.
+- Quando usar: Também é usado em produção ou ambientes de homologação para garantir que a estrutura do banco não esteja defasada em relação ao código.
+
+4. create
+- O que faz: Toda vez que você roda a aplicação, ele dá um DROP (apaga) em todas as tabelas do banco e recria elas do zero com base nas suas entidades.
+- Quando usar: Cuidado! Isso vai apagar todos os seus dados. Geralmente é evitado, a menos que você queira limpar tudo intencionalmente a cada inicialização (ex: em um servidor de testes onde os dados não importam).
+
+5. create-drop
+- O que faz: Igual ao create, ele recria as tabelas quando a aplicação liga. A diferença é que, quando você desliga/para a aplicação, ele apaga as tabelas novamente, deixando o banco limpo.
+- Quando usar: É a configuração padrão se você usar bancos de dados em memória (como o H2) para rodar testes automatizados.

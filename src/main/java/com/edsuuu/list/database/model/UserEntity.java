@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,27 +14,27 @@ import org.hibernate.annotations.UpdateTimestamp;
 @ToString
 @Entity
 @Builder
-@Table(name = "lists")
-public class ListEntity {
+@Table(name = "users")
+public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
-    
-    @Column(unique = true, nullable = false)
-    private String name;
-    
     @Column(nullable = false)
-    private String description;
+    private String name;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private java.time.LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private java.time.LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 }
