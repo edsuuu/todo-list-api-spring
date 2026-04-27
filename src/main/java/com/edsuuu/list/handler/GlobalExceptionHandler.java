@@ -4,8 +4,12 @@ import com.edsuuu.list.dto.ErrorResponseDTO;
 import com.edsuuu.list.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -17,5 +21,20 @@ public class GlobalExceptionHandler {
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .message("Erro de validação nos campos informados")
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .errors(errors)
+                .build();
+                
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }

@@ -6,7 +6,7 @@ spring:
     name: list
   
   datasource:
-    url: jdbc:mysql://localhost:3306/list?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=America/Sao_Paulo
+    url: jdbc:mysql://localhost:3306/list?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=America/Sao_Paulo&allowPublicKeyRetrieval=true
     username: root
     password: root
 

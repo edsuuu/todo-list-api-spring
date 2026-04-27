@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/list")
@@ -20,13 +21,13 @@ public class ListController {
     }
 
     @PostMapping
-    public ResponseEntity<ListEntity> create(@RequestBody CreateListDTO body) {
+    public ResponseEntity<ListEntity> create(@Valid @RequestBody CreateListDTO body) {
         ListEntity createdList = listService.createList(body);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdList);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ListEntity> update(@PathVariable Long id, @RequestBody CreateListDTO body) {
+    public ResponseEntity<ListEntity> update(@PathVariable Long id, @Valid @RequestBody CreateListDTO body) {
         ListEntity updatedList = listService.updateList(id, body);
         return ResponseEntity.ok(updatedList);
     }
