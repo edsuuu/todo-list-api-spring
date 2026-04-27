@@ -2,6 +2,7 @@ package com.edsuuu.list.handler;
 
 import com.edsuuu.list.dto.ErrorResponseDTO;
 import com.edsuuu.list.exception.NotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,5 +37,15 @@ public class GlobalExceptionHandler {
                 .build();
                 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleDataIntegrityException(DataIntegrityViolationException ex) {
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .message("Erro ao salvar: Já existe um registro com esse nome ou um campo obrigatório não foi preenchido.")
+                .statusCode(HttpStatus.CONFLICT.value())
+                .build();
+                
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }

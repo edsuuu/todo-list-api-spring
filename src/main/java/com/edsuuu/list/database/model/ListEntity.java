@@ -26,7 +26,7 @@ public class ListEntity {
      * com a lista logo de cara. Pode deixar a aplicação lenta se tiver muitos dados (problema do N+1).
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private UserEntity user;
     
     @Column(unique = true, nullable = false)
