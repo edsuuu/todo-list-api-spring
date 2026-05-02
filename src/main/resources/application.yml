@@ -18,3 +18,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  # Configuração padrão de usuário do Spring Security para ambiente de dev/testes
+  # Isso evita que a senha mude toda vez que a aplicação reiniciar
+  security:
+    user:
+      name: admin
+      password: admin123
+      roles: ADMIN
